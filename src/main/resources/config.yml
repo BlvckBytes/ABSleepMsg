@@ -1,0 +1,13 @@
+actionBar:
+  # - {sleeping_count}
+  # - {candidate_count}
+  thresholdNotYetReached: '&aEs befinden sich &2{sleeping_count}&a/&2{candidate_count} &aSpieler im Bett'
+  # - {sleeping_count}
+  # - {candidate_count}
+  thresholdReached: '&aDie Nacht wird durchgeschlafen'
+
+chat:
+  noCommandPermission: '&7[&5ABSleepMsg&7] &cDir fehlen die Zugriffsrechte für diesen Befehl!'
+  # - {command_label}
+  commandUsage: '&7[&5ABSleepMsg&7] &cBenutzung: /{command_label} reload'
+  configurationReloaded: '&7[&5ABSleepMsg&7] &aDie Konfiguration wurde erneut geladen.'

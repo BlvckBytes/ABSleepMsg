@@ -1,9 +1,11 @@
 actionBar:
   # - {sleeping_count}
   # - {candidate_count}
-  thresholdNotYetReached: '&aEs befinden sich &2{sleeping_count}&a/&2{candidate_count} &aSpieler im Bett'
+  # - {threshold_count}
+  thresholdNotYetReached: '&aEs befinden sich &2{sleeping_count}&a/&2{threshold_count} &aSpieler im Bett'
   # - {sleeping_count}
   # - {candidate_count}
+  # - {threshold_count}
   thresholdReached: '&aDie Nacht wird durchgeschlafen'
 
 chat:

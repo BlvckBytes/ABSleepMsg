@@ -3,6 +3,7 @@ package me.blvckbytes.absleepmsg;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,6 +33,10 @@ public class ABSleepMsgPlugin extends JavaPlugin implements CommandExecutor, Tab
     Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
       for (var world : Bukkit.getWorlds()) {
         var worldMembers = world.getPlayers();
+        var sleepingPercentage = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
+
+        if (sleepingPercentage == null)
+          sleepingPercentage = 50;
 
         var sleepCandidateCount = 0;
         var actuallySleepingCount = 0;
@@ -49,7 +54,8 @@ public class ABSleepMsgPlugin extends JavaPlugin implements CommandExecutor, Tab
         if (sleepCandidateCount == 0 || actuallySleepingCount == 0)
           continue;
 
-        var reachedThreshold = actuallySleepingCount >= (sleepCandidateCount + 1) / 2;
+        var thresholdCount = (int) Math.ceil(sleepCandidateCount * (sleepingPercentage / 100.0));
+        var reachedThreshold = actuallySleepingCount >= thresholdCount;
         var configuredMessage = accessConfigValue(
           "actionBar." + (reachedThreshold ? "thresholdReached" : "thresholdNotYetReached")
         );
@@ -58,6 +64,7 @@ public class ABSleepMsgPlugin extends JavaPlugin implements CommandExecutor, Tab
           configuredMessage
           .replace("{sleeping_count}", String.valueOf(actuallySleepingCount))
           .replace("{candidate_count}", String.valueOf(sleepCandidateCount))
+          .replace("{threshold_count}", String.valueOf(thresholdCount))
         );
 
         for (var worldMember : worldMembers) {

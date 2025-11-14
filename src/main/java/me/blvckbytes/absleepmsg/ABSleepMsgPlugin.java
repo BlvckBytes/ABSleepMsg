@@ -38,39 +38,42 @@ public class ABSleepMsgPlugin extends JavaPlugin implements CommandExecutor, Tab
         if (sleepingPercentage == null)
           sleepingPercentage = 50;
 
-        var sleepCandidateCount = 0;
-        var actuallySleepingCount = 0;
+        var isAnySleeping = false;
+        var nonIgnoredSleepCandidateCount = 0;
+        var nonIgnoredSleepingCount = 0;
 
         for (var worldMember : worldMembers) {
+          var isMemberSleeping = worldMember.isSleeping();
+
+          isAnySleeping |= isMemberSleeping;
+
           if (worldMember.isSleepingIgnored())
             continue;
 
-          ++sleepCandidateCount;
+          ++nonIgnoredSleepCandidateCount;
 
-          if (worldMember.isSleeping())
-            ++actuallySleepingCount;
+          if (isMemberSleeping)
+            ++nonIgnoredSleepingCount;
         }
 
-        if (sleepCandidateCount == 0 || actuallySleepingCount == 0)
+        if (!isAnySleeping)
           continue;
 
-        var thresholdCount = (int) Math.ceil(sleepCandidateCount * (sleepingPercentage / 100.0));
-        var reachedThreshold = actuallySleepingCount >= thresholdCount;
+        var thresholdCount = (int) Math.ceil(nonIgnoredSleepCandidateCount * (sleepingPercentage / 100.0));
+        var reachedThreshold = nonIgnoredSleepingCount >= thresholdCount;
         var configuredMessage = accessConfigValue(
           "actionBar." + (reachedThreshold ? "thresholdReached" : "thresholdNotYetReached")
         );
 
         var parameterizedMessage = TextComponent.fromLegacyText(
           configuredMessage
-          .replace("{sleeping_count}", String.valueOf(actuallySleepingCount))
-          .replace("{candidate_count}", String.valueOf(sleepCandidateCount))
+          .replace("{sleeping_count}", String.valueOf(nonIgnoredSleepingCount))
+          .replace("{candidate_count}", String.valueOf(nonIgnoredSleepCandidateCount))
           .replace("{threshold_count}", String.valueOf(thresholdCount))
         );
 
-        for (var worldMember : worldMembers) {
-          if (worldMember.isSleeping())
-            worldMember.spigot().sendMessage(ChatMessageType.ACTION_BAR, parameterizedMessage);
-        }
+        for (var worldMember : worldMembers)
+          worldMember.spigot().sendMessage(ChatMessageType.ACTION_BAR, parameterizedMessage);
       }
     }, 0, 5);
   }

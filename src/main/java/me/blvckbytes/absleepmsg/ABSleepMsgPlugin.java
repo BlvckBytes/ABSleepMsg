@@ -30,7 +30,7 @@ public class ABSleepMsgPlugin extends JavaPlugin implements CommandExecutor, Tab
     saveDefaultConfig();
     configuration = loadConfiguration();
 
-    Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+    Bukkit.getScheduler().runTaskTimer(this, () -> {
       for (var world : Bukkit.getWorlds()) {
         var worldMembers = world.getPlayers();
         var sleepingPercentage = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);

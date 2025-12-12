@@ -6,7 +6,7 @@
 
     <groupId>me.blvckbytes</groupId>
     <artifactId>ABSleepMsg</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
